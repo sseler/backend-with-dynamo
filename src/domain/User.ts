@@ -1,4 +1,4 @@
-import { IUser } from './IUser';
+import { IUser, UserKeys } from './IUser';
 
 export class User implements IUser {
   constructor(
@@ -14,7 +14,7 @@ export class User implements IUser {
     return this.id;
   }
 
-  mapToJson() {
+  read() {
     return {
       username: this.username,
       password: this.password,
@@ -26,19 +26,19 @@ export class User implements IUser {
 
   }
 
-  read(): void {
-
-  }
-
-  search(): void {
-
+  search(key: UserKeys): string {
+    return this[key];
   }
 
   delete(): void {
 
   }
 
-  update(): void {
+  update(value: string): void {
+    this.password = value;
+  }
 
+  validatePassword(value: string) {
+    return this.password === value;
   }
 }

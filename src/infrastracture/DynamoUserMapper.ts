@@ -1,7 +1,7 @@
 import { DynamoDBClient, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { DeleteCommand, GetCommand, PutCommand, UpdateCommand } from '@aws-sdk/lib-dynamodb';
 import { IDynamoMapper } from './IDynamoMapper';
-import { User } from '../Entity/User';
+import { User } from '../entity/User';
 
 export class DynamoUserMapper implements IDynamoMapper<User>  {
   constructor(private dbClient:  DynamoDBClient) {}

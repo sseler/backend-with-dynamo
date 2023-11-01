@@ -1,7 +1,7 @@
-import { User } from '../Entity/User';
+import { User } from '../entity/User';
 import { LoginDto, PasswordResetDto, SignupDto } from '../types';
 import { DynamoUserMapper } from '../infrastracture/DynamoUserMapper';
-import { UserKeys } from '../Entity/IUser';
+import { UserKeys } from '../entity/IUser';
 
 export class BasicService {
   constructor(private dbMapper: DynamoUserMapper) {}

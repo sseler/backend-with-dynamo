@@ -1,4 +1,4 @@
-import { User } from '../Entity/User';
+import { User } from '../entity/User';
 
 export interface IDynamoMapper<T> {
     put(data: T):Promise<void>;

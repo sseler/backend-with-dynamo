@@ -2,7 +2,9 @@
 
 ## Development pre requirements
 cp .env.default .env
+
 Edit .env file with data you want to develop with
+
 For safety reasons I did't provide AWS data.
 
 ## Install 

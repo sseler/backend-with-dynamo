@@ -7,6 +7,7 @@ import { authenticateToken } from './middleware/jwt';
 import { DynamoUserMapper } from './infrastracture/DynamoUserMapper';
 import { client, initTable } from './infrastracture/aws-client';
 import { logger } from './utils/logs';
+import { isValidSignupReq, isValidLoginReq, isValidPasswordResetReq } from './middleware/validateReqBody';
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,9 +18,9 @@ const authController = new AuthController();
 const entityController = new EntityController();
 
 // auth
-app.post('/signup', authenticateToken, (req, res) => authController.signup(req, res, basicService));
-app.post('/login', authenticateToken, (req, res) => authController.login(req, res, basicService));
-app.post('/password-reset/:userId', authenticateToken, (req, res) => authController.resetPassword(req, res, basicService));
+app.post('/signup', authenticateToken, isValidSignupReq,  (req, res) => authController.signup(req, res, basicService));
+app.post('/login', authenticateToken, isValidLoginReq, (req, res) => authController.login(req, res, basicService));
+app.post('/password-reset/:userId', authenticateToken, isValidPasswordResetReq,  (req, res) => authController.resetPassword(req, res, basicService));
 
 // data-managment
 

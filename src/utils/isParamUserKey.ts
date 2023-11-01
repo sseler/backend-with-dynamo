@@ -1,5 +1,5 @@
-import { UserKeys } from '../domain/IUser';
+import { UserKeys } from '../Entity/IUser';
 
 export const isParamUserKey = (key: string): key is UserKeys => {
-  return ['id', 'username', 'password', 'email'].includes(key);
+  return ['username', 'password', 'email'].includes(key);
 };

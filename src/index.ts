@@ -1,25 +1,32 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { BasicController } from './controllers/BasicController';
+import { EntityController } from './controllers/EntityController';
+import { AuthController } from './controllers/AuthController';
 import { BasicService } from './services/BasicService';
 import { authenticateToken } from './middleware/jwt';
-import { DbUserMapper } from './infrastracture/DbMapper';
-import { docClient, initTable } from './infrastracture/aws-client';
+import { DynamoUserMapper } from './infrastracture/DynamoUserMapper';
+import { client, initTable } from './infrastracture/aws-client';
+import { logger } from './utils/logs';
 
 const app = express();
 app.use(bodyParser.json());
 initTable();
-const database = new DbUserMapper(docClient);
+const database = new DynamoUserMapper(client);
 const basicService = new BasicService(database);
-const controller = new BasicController();
+const authController = new AuthController();
+const entityController = new EntityController();
 
-app.post('/signup', authenticateToken, (req, res) => controller.signup(req, res, basicService));
-app.get('/user/:userId', authenticateToken, (req, res) => controller.getUserById(req, res, basicService));
-app.post('/login', authenticateToken, (req, res) => controller.login(req, res, basicService));
-app.get('/user/:userId/:key', authenticateToken, (req, res) => controller.searchKeyValue(req, res, basicService));
+// auth
+app.post('/signup', authenticateToken, (req, res) => authController.signup(req, res, basicService));
+app.post('/login', authenticateToken, (req, res) => authController.login(req, res, basicService));
+app.post('/password-reset/:userId', authenticateToken, (req, res) => authController.resetPassword(req, res, basicService));
 
-// app.post('/password-reset', authenticateToken, controller.resetPassword);
+// data-managment
+
+app.get('/user/:userId', authenticateToken, (req, res) => entityController.getUserById(req, res, basicService));
+app.get('/user/:userId/:key', authenticateToken, (req, res) => entityController.searchKeyValue(req, res, basicService));
+app.delete('/user/:userId', authenticateToken, (req, res) => entityController.delete(req, res, basicService));
 
 app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
+  logger('info', `Server running on port ${process.env.PORT}`);
 });

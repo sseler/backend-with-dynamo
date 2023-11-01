@@ -1,12 +1,10 @@
-import { User } from '../domain/User';
-import { LoginDto, SignupDto } from '../types';
-import { DbUserMapper } from '../infrastracture/DbMapper';
-import { UserKeys } from '../domain/IUser';
+import { User } from '../Entity/User';
+import { LoginDto, PasswordResetDto, SignupDto } from '../types';
+import { DynamoUserMapper } from '../infrastracture/DynamoUserMapper';
+import { UserKeys } from '../Entity/IUser';
 
 export class BasicService {
-  constructor(private dbMapper: DbUserMapper) {
-
-  }
+  constructor(private dbMapper: DynamoUserMapper) {}
 
   public async signup({ username, email, password }: SignupDto) {
     const id = `${username}_${email}`; // in task that was writen not to use libraries, otherwise I would use uuidv4
@@ -31,8 +29,18 @@ export class BasicService {
     return keyValue;
   }
 
-  public async passwordReset(id: string, value: string) {
+  public async resetPassword(id: string, { oldPassword, newPassword }: PasswordResetDto) {
     const user = await this.dbMapper.get(id);
-    const isValid = user.validatePassword(value);
+    const isValid = user.update(oldPassword, newPassword);
+    if (!isValid) {
+      throw new Error('Old password does not match');
+    }
+    await this.dbMapper.update(user);
+  }
+
+  public async delete(id: string) {
+    await this.dbMapper.delete(id);
+    return true;
+
   }
 }

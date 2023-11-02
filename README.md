@@ -13,7 +13,7 @@ For safety reasons I did't provide AWS data.
 
 ## Install locally
 ```
-git git@github.com:sseler/backend-with-dynamo.git
+git clone git@github.com:sseler/backend-with-dynamo.git
 npm install
 npm run debug or any other script from 'Available scripts'
 `Table process.env.TABLE_NAME (default: 'users') created` - table was created in your AWS DynamoDB.

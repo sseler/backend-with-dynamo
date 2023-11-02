@@ -1,4 +1,4 @@
-# Fireart task
+# Node and DynamoDB backend
 
 ## Development pre requirements
 ```

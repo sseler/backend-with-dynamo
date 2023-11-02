@@ -1,0 +1,23 @@
+version: "3.4"
+services:
+
+  fire-art-backend:
+    build:
+      context: ./
+      target: base
+      dockerfile: ./docker/Dockerfile
+    user: "1000:1000"
+    environment:
+      - PORT=4000
+      - JWT_TOKEN=KLUCZ
+      - accessKeyId=yourAccessKey
+      - secretAccessKey=yourSecretAccessKey
+      - region=eu-north-1 #change if you are located in other region
+      - endpoint=http://dynamodb.eu-north-1.amazonaws.com #change if you are located in other region
+      - TABLE_NAME=users
+      - DEV=1
+    volumes:
+      - ./:/workspace/
+    ports:
+      - "4000:4000"
+    entrypoint: ./bin/dev-entrypoint.sh
